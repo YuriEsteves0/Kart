@@ -1,14 +1,8 @@
 package com.yuri.marketplace.view
 
-import android.graphics.Paint.Align
-import android.widget.ImageButton
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,32 +12,27 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -56,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.yuri.marketplace.R
+import com.yuri.marketplace.controller.CadastroController
 import com.yuri.marketplace.helper.AnimatedGrowingBox
 import com.yuri.marketplace.ui.theme.azulPrimario
 import com.yuri.marketplace.ui.theme.cinzaTexto
@@ -63,19 +53,26 @@ import com.yuri.marketplace.ui.theme.laranjaPrimario
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavController){
+fun CadastroScreen(navController: NavController) {
 
+    var nomeUser by remember{ mutableStateOf("") }
     var emailUser by remember { mutableStateOf("") }
     var senhaUser by remember{ mutableStateOf("") }
+    var senhaUser2 by remember{ mutableStateOf("") }
+
     var senhaVisivel by remember { mutableStateOf(false) }
+    var senhaVisivel2 by remember { mutableStateOf(false) }
+
     var isErrorEmail by remember { mutableStateOf(false) }
     var isErrorSenha by remember { mutableStateOf(false) }
+    var isErrorSenha2 by remember { mutableStateOf(false) }
+    var isErrorNome by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
     ) { paddingValues ->
-        Column (
+        Column(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize(),
@@ -102,6 +99,33 @@ fun LoginScreen(navController: NavController){
                             modifier = Modifier.size(30.dp)
                         )
                     }
+
+                    TextField(
+                        value = nomeUser,
+                        onValueChange = {
+                            nomeUser = it
+                            if (isErrorNome && it.isNotBlank()) isErrorNome = false
+                        },
+                        placeholder = { Text("Digite seu nome", color = cinzaTexto) },
+                        trailingIcon = {
+                            Icon(
+                                Icons.Default.Person,
+                                contentDescription = "Email",
+                                tint = azulPrimario
+                            )
+                        },
+                        isError = isErrorNome,
+                        modifier = Modifier
+                            .padding(20.dp)
+                            .fillMaxWidth()
+                            .background(color = Color.White, shape = RoundedCornerShape(10.dp)),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = Color.White,
+                            focusedIndicatorColor = if (isErrorEmail) Color.Red else azulPrimario,
+                            disabledIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = if (isErrorEmail) Color.Red else azulPrimario
+                        )
+                    )
 
                     TextField(
                         value = emailUser,
@@ -169,14 +193,53 @@ fun LoginScreen(navController: NavController){
                         )
                     )
 
+                    TextField(
+                        value = senhaUser2,
+                        onValueChange = {
+                            senhaUser2 = it
+                            if (isErrorSenha2 && it.isNotBlank()) isErrorSenha2 = false
+                        },
+                        isError = isErrorSenha2,
+                        placeholder = { Text("Repita sua senha") },
+                        visualTransformation = if (senhaVisivel2) VisualTransformation.None else PasswordVisualTransformation(),
+
+                        trailingIcon = {
+                            val imagem = if (senhaVisivel2) R.drawable.eye else R.drawable.hidden
+
+                            IconButton(
+                                onClick = {
+                                    senhaVisivel2 = !senhaVisivel2
+                                }
+                            ) {
+                                Image(
+                                    painter = painterResource(imagem),
+                                    contentDescription = "Repita a Senha",
+                                    contentScale = ContentScale.Fit,
+                                    modifier = Modifier.size(24.dp),
+                                    colorFilter = ColorFilter.tint(azulPrimario)
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(start = 20.dp, bottom = 20.dp, end = 20.dp)
+                            .fillMaxWidth()
+                            .background(color = Color.White, shape = RoundedCornerShape(10.dp)),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = Color.White,
+                            focusedIndicatorColor = if (isErrorSenha) Color.Red else azulPrimario,
+                            disabledIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = if (isErrorSenha) Color.Red else azulPrimario
+                        )
+                    )
+
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.padding(start = 20.dp)
                     ) {
-                        Text("Esqueceu sua senha?")
+                        Text("Já tem uma conta?")
                         TextButton(
                             onClick = {
-                                navController.navigate("cadastro")
+                                navController.navigate("login")
 
                             },
                             contentPadding = PaddingValues(start = 0.dp)
@@ -188,9 +251,12 @@ fun LoginScreen(navController: NavController){
                         onClick = {
                             isErrorEmail = emailUser.isBlank()
                             isErrorSenha = senhaUser.isBlank()
+                            isErrorSenha2 = senhaUser.isBlank()
 
-                            if (!isErrorEmail && !isErrorSenha) {
-                                navController.navigate("home")
+                            if (!isErrorEmail && !isErrorSenha && !isErrorSenha2) {
+                                var cadastroController = CadastroController()
+                                cadastroController.cadastrarUsuario(nomeUser, emailUser, senhaUser)
+                                navController.navigate("login")
                             }
                         },
                         elevation = ButtonDefaults.buttonElevation(
@@ -213,8 +279,7 @@ fun LoginScreen(navController: NavController){
 
 @Composable
 @Preview
-fun LoginPreview(){
-    val navController = NavController(context = LocalContext.current)
-    LoginScreen(navController)
+fun CadastroPreview(){
+    var navController = NavController(context = LocalContext.current)
+    CadastroScreen(navController)
 }
-

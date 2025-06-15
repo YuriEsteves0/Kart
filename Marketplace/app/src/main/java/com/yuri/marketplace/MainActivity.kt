@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.yuri.marketplace.ui.theme.MarketplaceTheme
+import com.yuri.marketplace.view.CadastroScreen
 import com.yuri.marketplace.view.ChatScreen
 import com.yuri.marketplace.view.EditUserDataScreen
 import com.yuri.marketplace.view.HomeScreen
@@ -35,6 +36,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable("login"){
                         LoginScreen(navController)
+                    }
+                    composable("cadastro"){
+                        CadastroScreen(navController)
                     }
                     composable("editUserData"){
                         EditUserDataScreen()

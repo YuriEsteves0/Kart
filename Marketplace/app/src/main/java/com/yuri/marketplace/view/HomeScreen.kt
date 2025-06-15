@@ -96,10 +96,11 @@ fun HomeScreen(paddingValues: PaddingValues = PaddingValues()){
 
 fun criarUsuarios() : MutableList<UsuarioModel>{
     var usuarios = mutableListOf<UsuarioModel>()
-    var usuario01 = UsuarioModel("Yuri", "yuri@gmail.com", "123456", true)
-    var usuario02 = UsuarioModel("João", "joao@gmail.com", "123456", false)
-    var usuario03 = UsuarioModel("Maria", "maria@gmail.com", "123456", false)
-    var usuario04 = UsuarioModel("Pedro", "pedro@gmail.com", "123456", true)
+    var usuario01 = UsuarioModel(1, "Yuri", "yuri@gmail.com", "123123", true, "A")
+    var usuario02 = UsuarioModel(2, "João", "joao@gmail.com", "123123", false, "U")
+    var usuario03 = UsuarioModel(3, "Maria", "maria@gmail.com", "123123", false, "U")
+    var usuario04 = UsuarioModel(4, "Pedro", "pedro@gmail.com", "123123", true, "A")
+
 
     usuarios.add(usuario01)
     usuarios.add(usuario02)
