@@ -1,5 +1,6 @@
 package com.yuri.marketplace.view
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,8 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.yuri.marketplace.model.UsuarioModel
+import com.yuri.marketplace.sessions.UserSession
 import com.yuri.marketplace.ui.theme.azulPrimario
 import com.yuri.marketplace.ui.theme.cinzaTexto
 import com.yuri.marketplace.ui.theme.laranjaPrimario
@@ -36,6 +41,9 @@ import com.yuri.marketplace.ui.theme.transparente
 
 @Composable
 fun ProfileScreen(navController: NavController){
+
+    val usuario = UserSession.usuarioLogado;
+
     Box(
         modifier = Modifier.fillMaxSize()
     ){
@@ -75,7 +83,11 @@ fun ProfileScreen(navController: NavController){
             }
 
             Spacer(Modifier.height(10.dp))
-            Text("Nome de Usuário", style = MaterialTheme.typography.titleLarge)
+            if(usuario != null){
+                Text(usuario.nome, style = MaterialTheme.typography.titleLarge)
+            }else{
+                Text("U.N.I", style = MaterialTheme.typography.titleLarge)
+            }
             Spacer(Modifier.height(10.dp))
 
             Button(

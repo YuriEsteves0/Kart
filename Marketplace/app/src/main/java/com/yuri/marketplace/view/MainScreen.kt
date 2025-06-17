@@ -63,6 +63,7 @@ import androidx.navigation.NavController
 import com.yuri.marketplace.R
 import com.yuri.marketplace.controller.HomeScreenController
 import com.yuri.marketplace.model.BottomNavItem
+import com.yuri.marketplace.model.UsuarioModel
 import com.yuri.marketplace.ui.theme.azulPrimario
 import com.yuri.marketplace.ui.theme.cinzaObjeto
 import com.yuri.marketplace.ui.theme.cinzaTexto
@@ -70,7 +71,7 @@ import com.yuri.marketplace.ui.theme.laranjaPrimario
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun MainScreen(navController: NavController){
+fun MainScreen(navController: NavController) {
 
     var triggerBtnSearch by remember { mutableStateOf(false) }
     var textoPesquisa by remember { mutableStateOf("") }
@@ -87,7 +88,6 @@ fun MainScreen(navController: NavController){
         BottomNavItem.Chats,
         BottomNavItem.Perfil
     )
-
     var selectedItem by remember { mutableStateOf(2) }
 
     Scaffold(
@@ -252,11 +252,4 @@ fun MainScreen(navController: NavController){
 fun abrirLink(context: android.content.Context) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/YuriEsteves0"))
     context.startActivity(intent)
-}
-
-@Composable
-@Preview
-fun MainScreenPreview(){
-    val navController = NavController(LocalContext.current)
-    MainScreen(navController)
 }

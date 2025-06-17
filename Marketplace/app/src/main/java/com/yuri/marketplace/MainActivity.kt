@@ -11,9 +11,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.yuri.marketplace.controller.LoginController
+import com.yuri.marketplace.model.UsuarioModel
 import com.yuri.marketplace.ui.theme.MarketplaceTheme
 import com.yuri.marketplace.view.CadastroScreen
 import com.yuri.marketplace.view.ChatScreen
@@ -21,7 +26,6 @@ import com.yuri.marketplace.view.EditUserDataScreen
 import com.yuri.marketplace.view.HomeScreen
 import com.yuri.marketplace.view.LoginScreen
 import com.yuri.marketplace.view.MainScreen
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,18 +33,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             MarketplaceTheme {
                 val navController = rememberNavController()
-
-                NavHost(navController = navController, startDestination = "login"){
-                    composable("home"){
-                        MainScreen(navController)
-                    }
-                    composable("login"){
+                NavHost(navController = navController, startDestination = "login") {
+                    composable("login") {
                         LoginScreen(navController)
                     }
-                    composable("cadastro"){
+                    composable("home") {
+                        MainScreen(navController)
+                    }
+                    composable("cadastro") {
                         CadastroScreen(navController)
                     }
-                    composable("editUserData"){
+                    composable("editUserData") {
                         EditUserDataScreen()
                     }
                 }

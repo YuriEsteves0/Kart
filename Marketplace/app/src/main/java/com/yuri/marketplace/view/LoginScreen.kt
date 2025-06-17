@@ -1,5 +1,6 @@
 package com.yuri.marketplace.view
 
+import android.annotation.SuppressLint
 import android.graphics.Paint.Align
 import android.widget.ImageButton
 import androidx.compose.animation.core.Spring
@@ -30,6 +31,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -40,6 +43,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,26 +58,37 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.yuri.marketplace.R
+import com.yuri.marketplace.controller.LoginController
 import com.yuri.marketplace.helper.AnimatedGrowingBox
 import com.yuri.marketplace.ui.theme.azulPrimario
 import com.yuri.marketplace.ui.theme.cinzaTexto
 import com.yuri.marketplace.ui.theme.laranjaPrimario
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavController){
+fun LoginScreen(navController: NavController) {
 
     var emailUser by remember { mutableStateOf("") }
     var senhaUser by remember{ mutableStateOf("") }
     var senhaVisivel by remember { mutableStateOf(false) }
     var isErrorEmail by remember { mutableStateOf(false) }
     var isErrorSenha by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val corroutine = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        snackbarHost = {SnackbarHost(snackbarHostState)}
+
     ) { paddingValues ->
         Column (
             modifier = Modifier
@@ -190,7 +205,14 @@ fun LoginScreen(navController: NavController){
                             isErrorSenha = senhaUser.isBlank()
 
                             if (!isErrorEmail && !isErrorSenha) {
-                                navController.navigate("home")
+                                corroutine.launch {
+                                    val resultado = LoginController().loginUsuario(emailUser, senhaUser, navController, context)
+                                    if (resultado == 0) {
+                                        isErrorEmail = true
+                                        isErrorSenha = true
+                                        snackbarHostState.showSnackbar("Email/Senha incorretos")
+                                    }
+                                }
                             }
                         },
                         elevation = ButtonDefaults.buttonElevation(
@@ -211,6 +233,7 @@ fun LoginScreen(navController: NavController){
     }
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 @Preview
 fun LoginPreview(){

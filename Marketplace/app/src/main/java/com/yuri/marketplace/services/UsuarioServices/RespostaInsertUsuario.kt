@@ -1,4 +1,4 @@
-package com.yuri.marketplace.services
+package com.yuri.marketplace.services.UsuarioServices
 
 data class RespostaInsertUsuario(
     val success: Boolean,
