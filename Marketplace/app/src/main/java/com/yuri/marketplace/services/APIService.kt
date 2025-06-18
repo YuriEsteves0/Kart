@@ -19,8 +19,14 @@ interface APIService {
     ): RespostaInsertUsuario
 
     @FormUrlEncoded
-    @POST("selectUser.php")
-    suspend fun selectUser(
+    @POST("selectUserById.php")
+    suspend fun selectUserById(
+        @Field("id") id: Int?,
+    ): RespostaSelectUsuario
+
+    @FormUrlEncoded
+    @POST("selectUserByEmailAndPassword.php")
+    suspend fun selectUserByEmailAndPassword(
         @Field("email") email: String,
         @Field("senha") senha: String
     ): RespostaSelectUsuario

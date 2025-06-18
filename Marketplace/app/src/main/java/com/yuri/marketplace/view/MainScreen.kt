@@ -253,3 +253,11 @@ fun abrirLink(context: android.content.Context) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/YuriEsteves0"))
     context.startActivity(intent)
 }
+
+
+@Preview
+@Composable
+fun mainScreenPreview(){
+    val navController = NavController(LocalContext.current)
+    MainScreen(navController)
+}

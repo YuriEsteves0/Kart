@@ -1,6 +1,7 @@
 package com.yuri.marketplace
 
 import android.os.Bundle
+import android.window.SplashScreen
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,6 +27,8 @@ import com.yuri.marketplace.view.EditUserDataScreen
 import com.yuri.marketplace.view.HomeScreen
 import com.yuri.marketplace.view.LoginScreen
 import com.yuri.marketplace.view.MainScreen
+import com.yuri.marketplace.view.SplashScreen
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +36,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             MarketplaceTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "login") {
+                NavHost(navController = navController, startDestination = "splashScreen") {
+                    composable("splashScreen"){
+                        SplashScreen(navController)
+                    }
                     composable("login") {
                         LoginScreen(navController)
                     }
                     composable("home") {
+
                         MainScreen(navController)
                     }
                     composable("cadastro") {

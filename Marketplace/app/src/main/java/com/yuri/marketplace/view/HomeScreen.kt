@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.yuri.marketplace.R
 import com.yuri.marketplace.model.ProdutoModel
 import com.yuri.marketplace.model.UsuarioModel
@@ -86,9 +87,6 @@ fun HomeScreen(paddingValues: PaddingValues = PaddingValues()){
                         Card(produtos)
                     }
                 }
-
-
-
             }
         }
     }
@@ -127,6 +125,7 @@ fun criarProdutos(usuarios: MutableList<UsuarioModel>) : MutableList<ProdutoMode
     return produtos
 
 }
+
 @Composable
 fun Card(produtos: MutableList<ProdutoModel>) {
     val produto = produtos.random()
@@ -150,13 +149,14 @@ fun Card(produtos: MutableList<ProdutoModel>) {
                     .fillMaxWidth()
                     .height(100.dp)
             ) {
-                Image(
-                    painter = painterResource(produto.foto),
-                    contentDescription = "Imagem do produto",
+                AsyncImage(
+                    model = "https://www.yuriesteves.x-br.com/uploads/imgperfil/ProfPic_usuario_DipmgfeikQbhch6nXGfxxcU0UNq2.jpeg",
+                    contentDescription = "Foto do perfil",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .fillMaxSize()
                         .clip(RoundedCornerShape(10.dp))
+
                 )
 
                 if(produto.usuarioModel.assinante){

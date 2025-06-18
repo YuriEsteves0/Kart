@@ -18,7 +18,8 @@ class LoginController {
     suspend fun loginUsuario(email: String, senha: String, navController: NavController, context: android.content.Context) : Int{
 
         var apiHelper: APIHelper = APIHelper()
-        val usuarioExistente = apiHelper.verificarUsuario(email, senha)
+        val usuarioExistente = apiHelper.verificarUsuarioByEmailAndPassword( email, senha)
+
         if(usuarioExistente != null){
             Log.d("TAG", "usuario existente: " + usuarioExistente)
             UserSession.usuarioLogado = usuarioExistente
@@ -26,7 +27,11 @@ class LoginController {
             val sharedPreferencesHelper = SharedPreferencesHelper(context)
             sharedPreferencesHelper.salvar("idUsu", usuarioExistente.id.toString())
 
-            navController.navigate("home")
+            navController.navigate("home"){
+                popUpTo("login"){
+                    inclusive = true
+                }
+            }
 
             return 1;
         }else{

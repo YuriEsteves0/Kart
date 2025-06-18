@@ -3,15 +3,12 @@ package com.yuri.marketplace.helper
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.yuri.marketplace.model.UsuarioModel
 import com.yuri.marketplace.services.RetrofitClient
 import kotlinx.coroutines.launch
 
-class APIHelper : ViewModel() {
+class APIHelper {
     var mensagem by mutableStateOf("")
-
 
     suspend fun salvarUsuario(nome: String, email: String, senha: String) : Boolean {
         try{
@@ -28,9 +25,24 @@ class APIHelper : ViewModel() {
         }
     }
 
-    suspend fun verificarUsuario(email: String, senha: String) : UsuarioModel?{
+    suspend fun verificarUsuarioPeloId(idUsu: Int?) : UsuarioModel?{
         try{
-            val resposta = RetrofitClient.apiService.selectUser(email, senha)
+            val resposta = RetrofitClient.apiService.selectUserById(idUsu)
+            if(resposta.success){
+                mensagem = resposta.message
+                return resposta.dados
+            }else{
+                mensagem = resposta.message
+                return null
+            }
+        }catch (e: Exception){
+            return null
+        }
+    }
+
+    suspend fun verificarUsuarioByEmailAndPassword(email: String, senha: String) : UsuarioModel?{
+        try{
+            val resposta = RetrofitClient.apiService.selectUserByEmailAndPassword(email, senha)
             if(resposta.success == true){
                 mensagem = resposta.message
                 return resposta.dados
