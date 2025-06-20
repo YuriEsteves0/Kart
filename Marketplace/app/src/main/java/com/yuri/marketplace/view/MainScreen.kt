@@ -198,7 +198,7 @@ fun MainScreen(navController: NavController) {
                                     if(selectedItem == 2){
                                         IconButton(
                                             onClick = {
-                                                // TODO "FAZER O MÉTODO DE ENTRAR NA DASHBOARD"
+                                                navController.navigate("dashboard")
                                             },
                                         ) {
                                             Image(
