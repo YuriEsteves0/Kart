@@ -40,6 +40,14 @@ class APIHelper {
         }
     }
 
+    suspend fun adicionarProduto(nomeProduto: String, precoProduto: String, idUsuario: String) : Boolean {
+        try {
+            val resposta = RetrofitClient.apiService.inserirProduto(nomeProduto, precoProduto, idUsuario)
+        }catch (e: Exception){
+            return false
+        }
+    }
+
     suspend fun verificarUsuarioByEmailAndPassword(email: String, senha: String) : UsuarioModel?{
         try{
             val resposta = RetrofitClient.apiService.selectUserByEmailAndPassword(email, senha)

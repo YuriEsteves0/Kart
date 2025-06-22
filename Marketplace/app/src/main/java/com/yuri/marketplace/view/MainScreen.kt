@@ -88,7 +88,7 @@ fun MainScreen(navController: NavController) {
         BottomNavItem.Chats,
         BottomNavItem.Perfil
     )
-    var selectedItem by remember { mutableStateOf(2) }
+    var selectedItem by remember { mutableStateOf(0) }
 
     Scaffold(
         containerColor = cinzaObjeto,

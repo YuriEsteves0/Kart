@@ -70,7 +70,7 @@ fun EditUserDataScreen(navController: NavController) {
     var senha by remember { mutableStateOf("") }
     var senha2 by remember { mutableStateOf("") }
 
-    var tela by remember { mutableStateOf(2) }
+    var tela by remember { mutableStateOf(1) }
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
 

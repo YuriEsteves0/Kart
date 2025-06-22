@@ -31,4 +31,12 @@ interface APIService {
         @Field("senha") senha: String
     ): RespostaSelectUsuario
 
+    @FormUrlEncoded
+    @POST("insertProduto.php")
+    suspend fun inserirProduto(
+        @Field("nomeProduto") nomeProduto: String,
+        @Field("precoProduto") precoProduto: String,
+        @Field("idUsuario") idUsuario: String
+    )
+
 }

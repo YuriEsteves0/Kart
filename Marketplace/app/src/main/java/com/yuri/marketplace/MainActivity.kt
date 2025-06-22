@@ -28,6 +28,7 @@ import com.yuri.marketplace.view.HomeScreen
 import com.yuri.marketplace.view.LoginScreen
 import com.yuri.marketplace.view.MainScreen
 import com.yuri.marketplace.view.SplashScreen
+import com.yuri.marketplace.view.dashboard.AddProdutoScreen
 import com.yuri.marketplace.view.dashboard.MainScreenDashboard
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +38,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MarketplaceTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "dashboard") {
+                NavHost(navController = navController, startDestination = "splashScreen") {
                     composable("splashScreen"){
                         SplashScreen(navController)
                     }
@@ -64,6 +65,20 @@ class MainActivity : ComponentActivity() {
                     composable("dashboardProdutos"){
 
                     }
+
+                    composable("addProduto"){
+                        AddProdutoScreen(navController)
+                    }
+
+                    composable("addVendas"){
+                        AddProdutoScreen(navController)
+                    }
+
+                    composable("addPerguntas"){
+                        AddProdutoScreen(navController)
+                    }
+
+
                 }
             }
         }

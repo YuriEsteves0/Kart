@@ -50,9 +50,14 @@ fun HomeScreenDashboard(navController: NavController) {
         "Alcance" to R.drawable.eye
     )
 
+    Text("Dashboard -> Inicio", style = MaterialTheme.typography.titleMedium)
+    Spacer(Modifier.height(30.dp))
+
     Row {
         Button(
-            onClick = {},
+            onClick = {
+                navController.navigate("addProduto")
+            },
             Modifier.weight(1f)
                 .padding(end = 4.dp),
             colors = ButtonColors(

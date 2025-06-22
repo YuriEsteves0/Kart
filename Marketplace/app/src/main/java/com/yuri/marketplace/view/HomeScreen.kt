@@ -30,9 +30,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.yuri.marketplace.R
 import com.yuri.marketplace.model.ProdutoModel
 import com.yuri.marketplace.model.UsuarioModel
@@ -149,14 +151,18 @@ fun Card(produtos: MutableList<ProdutoModel>) {
                     .fillMaxWidth()
                     .height(100.dp)
             ) {
+
                 AsyncImage(
-                    model = "https://www.yuriesteves.x-br.com/uploads/imgperfil/ProfPic_usuario_DipmgfeikQbhch6nXGfxxcU0UNq2.jpeg",
-                    contentDescription = "Foto do perfil",
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data("https://www.yuriesteves.x-br.com/uploads/imgperfil/ProfPic_usuario_DipmgfeikQbhch6nXGfxxcU0UNq2.jpeg")
+                        .size(256)
+                        .crossfade(true)
+                        .build(),
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(RoundedCornerShape(10.dp))
-
+                        .clip(RoundedCornerShape(10.dp)),
+                    contentDescription = null
                 )
 
                 if(produto.usuarioModel.assinante){
