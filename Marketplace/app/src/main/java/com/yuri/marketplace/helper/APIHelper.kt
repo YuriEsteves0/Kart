@@ -6,6 +6,10 @@ import androidx.compose.runtime.setValue
 import com.yuri.marketplace.model.UsuarioModel
 import com.yuri.marketplace.services.RetrofitClient
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 
 class APIHelper {
     var mensagem by mutableStateOf("")
@@ -40,11 +44,26 @@ class APIHelper {
         }
     }
 
-    suspend fun adicionarProduto(nomeProduto: String, precoProduto: String, idUsuario: String) : Boolean {
-        try {
-            val resposta = RetrofitClient.apiService.inserirProduto(nomeProduto, precoProduto, idUsuario)
-        }catch (e: Exception){
-            return false
+    suspend fun adicionarProdutoComImagem(
+        nomeProduto: String,
+        precoProduto: String,
+        idUsuario: String,
+        fotoPath: String
+    ): Boolean {
+        return try {
+            val file = File(fotoPath)
+            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file)
+            val body = MultipartBody.Part.createFormData("foto", file.name, requestFile)
+
+            val nome = RequestBody.create("text/plain".toMediaTypeOrNull(), nomeProduto)
+            val preco = RequestBody.create("text/plain".toMediaTypeOrNull(), precoProduto)
+            val usuarioID = RequestBody.create("text/plain".toMediaTypeOrNull(), idUsuario)
+
+            val resposta = RetrofitClient.apiService.inserirProdutoComImagem(nome, preco, usuarioID, body)
+
+            resposta.sucess == true
+        } catch (e: Exception) {
+            false
         }
     }
 

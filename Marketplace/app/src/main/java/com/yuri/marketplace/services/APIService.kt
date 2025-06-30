@@ -1,11 +1,16 @@
 package com.yuri.marketplace.services
 
+import com.yuri.marketplace.services.ProdutoServices.RespostaInsertProduto
 import com.yuri.marketplace.services.UsuarioServices.RespostaInsertUsuario
 import com.yuri.marketplace.services.UsuarioServices.RespostaSelectUsuario
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface APIService {
@@ -31,12 +36,12 @@ interface APIService {
         @Field("senha") senha: String
     ): RespostaSelectUsuario
 
-    @FormUrlEncoded
+    @Multipart
     @POST("insertProduto.php")
-    suspend fun inserirProduto(
-        @Field("nomeProduto") nomeProduto: String,
-        @Field("precoProduto") precoProduto: String,
-        @Field("idUsuario") idUsuario: String
-    )
-
+    suspend fun inserirProdutoComImagem(
+        @Part("nome") nome: RequestBody,
+        @Part("preco") preco: RequestBody,
+        @Part("usuarioID") usuarioID: RequestBody,
+        @Part foto: MultipartBody.Part
+    ): RespostaInsertProduto
 }

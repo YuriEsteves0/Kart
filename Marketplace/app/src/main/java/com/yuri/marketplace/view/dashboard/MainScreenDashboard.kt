@@ -138,6 +138,9 @@ fun MainScreenDashboard(navController: NavController){
                                 MainScreenDashboard(navController)
                                 fab = true
                             }
+                            "home" -> {
+                                navController.navigate("home")
+                            }
                             else -> navController.popBackStack()
                         }
                     }

@@ -1,6 +1,14 @@
 package com.yuri.marketplace.view.dashboard
 
+import android.app.Activity
+import android.app.Instrumentation.ActivityResult
+import android.net.Uri
+import android.widget.ImageButton
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,23 +44,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.github.dhaval2404.imagepicker.ImagePicker
+import com.yuri.marketplace.R
 import com.yuri.marketplace.controller.Dashboard.AddProdutoController
 import com.yuri.marketplace.helper.SharedPreferencesHelper
 import com.yuri.marketplace.ui.theme.azulPrimario
 import com.yuri.marketplace.ui.theme.cinzaObjeto
 import com.yuri.marketplace.ui.theme.laranjaPrimario
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,6 +81,14 @@ fun AddProdutoScreen(navController: NavController) {
     val idUsuario by remember { mutableStateOf(sharedPref.encontrarId("idUsu") ?: "",) }
     var stateSheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var mostrarSheet by remember { mutableStateOf(false) }
+    val scopoCorrotine = rememberCoroutineScope()
+    val imageUri = remember { mutableStateOf<Uri?>(null) }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri.value = uri
+    }
+    val context = LocalContext.current
 
     if(mostrarSheet){
         ModalBottomSheet(
@@ -165,6 +190,28 @@ fun AddProdutoScreen(navController: NavController) {
 
             Spacer(Modifier.height(10.dp))
 
+            IconButton(
+                modifier = Modifier.fillMaxWidth().height(300.dp),
+                onClick = {
+                    launcher.launch("image/*")
+                }
+            ) {
+                imageUri.value?.let { uri ->
+                    AsyncImage(
+                        model = uri,
+                        contentDescription = null,
+                        placeholder = painterResource(R.drawable.semfoto),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp)
+                            .clip(RoundedCornerShape(12.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(10.dp))
+
             TextField(
                 value = nomeProduto,
                 onValueChange = {
@@ -262,7 +309,15 @@ fun AddProdutoScreen(navController: NavController) {
                 Spacer(Modifier.width(10.dp))
                 Button(
                     onClick = {
-                        AddProdutoController().adicionarProduto(nomeProduto, precoProduto.text, idUsuario)
+                        scopoCorrotine.launch {
+                            AddProdutoController().adicionarProduto(
+                                context,
+                                nomeProduto,
+                                precoProduto.text,
+                                idUsuario,
+                                imageUri.value
+                            )
+                        }
                         navController.popBackStack()
                     },
                     colors = ButtonColors(
